@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <button id="btnEmpezar" onclick="InicializarJuego()">Empezar</button>
+    </div>
+
+    <br>
+
+    <button id="btnA1" class="pieza" onclick="CambiarAXO('btnA1')">-</button>   <button id="btnB1" class="pieza" onclick="CambiarAXO('btnB1')">-</button>   <button id="btnC1" class="pieza" onclick="CambiarAXO('btnC1')">-</button>   <br>
+    <button id="btnA2" class="pieza" onclick="CambiarAXO('btnA2')">-</button>   <button id="btnB2" class="pieza" onclick="CambiarAXO('btnB2')">-</button>   <button id="btnC2" class="pieza" onclick="CambiarAXO('btnC2')">-</button>   <br>
+    <button id="btnA3" class="pieza" onclick="CambiarAXO('btnA3')">-</button>   <button id="btnB3" class="pieza" onclick="CambiarAXO('btnB3')">-</button>   <button id="btnC3" class="pieza" onclick="CambiarAXO('btnC3')">-</button>   <br>
+
+
+    <script src="confetti.min.js"></script>
+
+    <script>
+
+        //Variable Global de turno que tiene valor X u O
+        let turno = "X";
+
+        function CambiarAXO(boton)
+        {
+            //Recibe un boton y lo cambio por el X u O dependiendo del turno!!
+            //Switchea turno!!
+
+            const valorBoton = document.getElementById(boton);
+            
+            
+            if(valorBoton.innerHTML === "-")
+            {
+                valorBoton.innerHTML = turno;
+                AnalizarSiGanoQuienToco();
+
+                if(turno === "X")
+                    turno = "O";
+                else
+                    turno = "X";
+
+            }
+        }
+        function InicializarJuego()
+        {
+            turno = "X";
+            BloquearTodo(false);
+            confetti.stop();
+
+            const piezas = document.getElementsByClassName("pieza");
+            
+            for (let index = 0; index < piezas.length; index++) {
+                piezas[index].innerHTML = "-";
+            }
+        }
+        function AnalizarSiGanoQuienToco()
+        {
+            const A1 = document.getElementById('btnA1').innerHTML === '-' ? "A1" : document.getElementById('btnA1').innerHTML;
+            const A2 = document.getElementById('btnA2').innerHTML === '-' ? "A2" : document.getElementById('btnA2').innerHTML;
+            const A3 = document.getElementById('btnA3').innerHTML === '-' ? "A3" : document.getElementById('btnA3').innerHTML;
+
+            const B1 = document.getElementById('btnB1').innerHTML === '-' ? "B1" : document.getElementById('btnB1').innerHTML;
+            const B2 = document.getElementById('btnB2').innerHTML === '-' ? "B2" : document.getElementById('btnB2').innerHTML;
+            const B3 = document.getElementById('btnB3').innerHTML === '-' ? "B3" : document.getElementById('btnB3').innerHTML;
+
+            const C1 = document.getElementById('btnC1').innerHTML === '-' ? "C1" : document.getElementById('btnC1').innerHTML;
+            const C2 = document.getElementById('btnC2').innerHTML === '-' ? "C2" : document.getElementById('btnC2').innerHTML;
+            const C3 = document.getElementById('btnC3').innerHTML === '-' ? "C3" : document.getElementById('btnC3').innerHTML;
+
+
+            if(
+                (A1 === B1 && B1 === C1) || (A2 === B2 && B2 === C2)  || (A3 === B3 && B3 === C3) ||    //Horizontal
+                (A1 === A2 && A2 === A3) || (B1 === B2 && B2 === B3)  || (C1 === C2 && C2 === C3) ||    //Vertical
+                (A1 === B2 && B2 === C3) || (A3 === B2 && B2 === C1))                                   //Diagonales
+            {
+                BloquearTodo(true);
+                Papelitos();
+                alert("Gano: " + turno);
+            }
+        }
+
+        function BloquearTodo(partidaGanada)
+        {
+            const piezas = document.getElementsByClassName("pieza");
+            
+            for (let index = 0; index < piezas.length; index++) {
+                piezas[index].disabled = partidaGanada;
+            }
+        }
+
+        function Papelitos()
+        {
+            confetti.start();
+        }
+    </script>
+
+
+
+    
+
+    <style>
+        button.pieza {
+            height: 50px;    
+            width: 50px;
+        }
+    </style>
+</body>
+
+</html>
